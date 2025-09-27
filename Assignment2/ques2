@@ -1,0 +1,39 @@
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        mergeSort(nums,0,nums.length-1);
+           return nums[nums.length-k];
+    }
+     void mergeSort(int arr[], int l, int r) {
+        divide(arr,l,r);
+    }
+    static void divide(int[] arr,int l,int r){
+        if(l<r){
+            int mid = l + (r-l)/2;
+            divide(arr,l,mid);
+            divide(arr,mid+1,r);
+            merge(arr,l,mid,r);
+        }
+    }
+    static void merge(int[] arr, int l,int mid,int r){
+        int[] ans = new int[r-l+1];
+        int i = l;
+        int j = mid+1;
+        int k = 0;
+        while(i<=mid && j<=r){
+            if(arr[i]<=arr[j]){
+                ans[k++] = arr[i++];
+            }else{
+                ans[k++] = arr[j++];
+            }
+        }
+        while(i<=mid){
+            ans[k++] = arr[i++];
+        }
+        while(j<=r){
+            ans[k++] = arr[j++];
+        }
+        for(int x=0;x<ans.length;x++){
+            arr[x+l] = ans[x];
+        }
+    }
+}
