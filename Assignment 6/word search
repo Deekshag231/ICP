@@ -1,0 +1,33 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        boolean[][] visit=new boolean[board.length][board[0].length];
+        int r=board.length;
+        int c=board[0].length;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                int k=0;
+                if(helper(board,word,k,i,j,visit)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    boolean helper(char[][] board,String word,int k,int r,int c,boolean[][] visit){
+        if(k==word.length()){
+            return true;
+        }
+        if(r<0||c<0||r>=board.length||c>=board[0].length||board[r][c]!=word.charAt(k)||visit[r][c]){
+            return false;
+        }
+        visit[r][c]=true;
+        if(helper(board,word,k+1,r+1,c,visit)||helper(board,word,k+1,r-1,c,visit)||
+        helper(board,word,k+1,r,c+1,visit)||
+        helper(board,word,k+1,r,c-1,visit)){
+            return true;
+        }
+        visit[r][c]=false;
+        return false;
+    }
+}
