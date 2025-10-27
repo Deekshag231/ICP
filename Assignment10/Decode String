@@ -1,46 +1,37 @@
 class Solution {
-    public String decodeString(String s) {
-        Stack<String> stack = new Stack<>();
-        
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            
-            if (Character.isDigit(c)) {
-                int start = i;
-                i += 1;
-                while (Character.isDigit(s.charAt(i))) i++;
-                stack.push(s.substring(start, i));
-                i--;
-                continue;
+    static String decodeString(String s) {
+        Stack<Character> st=new Stack<>();
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)==']'){
+                String temp="";
+                while(!st.isEmpty()&&st.peek()!='['){
+                    temp=st.peek()+temp;
+                    st.pop();
+                }
+                st.pop();
+                String num="";
+                while(!st.isEmpty()&&Character.isDigit(st.peek())){
+                    num=st.peek()+num;
+                    st.pop();
+                }
+                int number=Integer.parseInt(num);
+                String repeat="";
+                for(int j=0;j<number;j++){
+                    repeat+=temp;
+                }
+                for(int k=0;k<repeat.length();k++){
+                    st.push(repeat.charAt(k));
+                }
             }
-            
-            if (c == ']') {
-                StringBuilder expandedString = new StringBuilder();
-                String temp;
-                
-                while (!(temp = stack.pop()).equals("[")) {
-                    expandedString.insert(0, temp);
-                }
-                
-                int count = Integer.parseInt(stack.pop());
-                StringBuilder finalString = new StringBuilder();
-                
-                while (count-- > 0) {
-                    finalString.append(expandedString);
-                }
-                
-                stack.push(finalString.toString());
-            } else {
-                stack.push(String.valueOf(c));
+            else{
+                st.push(s.charAt(i));
             }
         }
-        
-        StringBuilder solution = new StringBuilder();
-        
-        while (!stack.isEmpty()) {
-            solution.insert(0, stack.pop());
+        String res="";
+        while(!st.isEmpty()){
+            res=st.pop()+res;
+         
         }
-        
-        return solution.toString();
+        return res;
     }
 }
